@@ -11,6 +11,25 @@ import java.util.List;
 @RequestMapping("/api/tickets")
 public class TicketController {
 
+    @PutMapping("/{id}")
+    public Ticket updateTicket(@PathVariable Long id, @RequestBody Ticket updatedTicket) {
+        Ticket ticket = ticketRepository.findById(id).orElse(null);
+        if (ticket == null) {
+            return null;
+        }
+        ticket.setTitle(updatedTicket.getTitle());
+        ticket.setDescription(updatedTicket.getDescription());
+        ticket.setPriority(updatedTicket.getPriority());
+        ticket.setCategory(updatedTicket.getCategory());
+        return ticketRepository.save(ticket);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteTicket(@PathVariable Long id) {
+        ticketRepository.deleteById(id);
+        return "Ticket deleted with id: " + id;
+    }
+
     @Autowired
     private TicketRepository ticketRepository;
 
